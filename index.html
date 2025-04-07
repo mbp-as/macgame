@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Гра: Стріляй по М</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
   <style>
     @font-face {
       font-family: 'Joystix';
@@ -20,16 +21,16 @@
       position: relative;
       width: 100%;
       height: 100vh;
-      background: #cce;
+      background: rgb(250, 255, 199);
     }
     #aim {
       position: absolute;
       top: 0;
       width: 0;
       height: 0;
-      border-left: 10px solid transparent;
-      border-right: 10px solid transparent;
-      border-bottom: 20px solid black;
+      border-left: 20px solid transparent;
+      border-right: 20px solid transparent;
+      border-bottom: 40px solid black;
       z-index: 20;
     }
     #building {
@@ -37,18 +38,18 @@
       bottom: 100px;
       left: 50%;
       transform: translateX(-50%);
-      width: 150px;
-      height: 150px;
+      width: 200px;
+      height: 200px;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       grid-template-rows: repeat(3, 1fr);
       gap: 1px;
     }
     .block {
-      width: 50px;
-      height: 50px;
+      width: 66px;
+      height: 66px;
       background-image: url('mac.png');
-      background-size: 150px 150px;
+      background-size: 200px 200px;
     }
     .invisible {
       opacity: 0;
@@ -57,31 +58,31 @@
     .projectile {
       position: absolute;
       width: 10px;
-      height: 20px;
+      height: 10px;
       background: red;
-      border-radius: 4px;
+      border-radius: 6px;
       z-index: 10;
     }
     #controls {
       position: absolute;
-      bottom: 10px;
+      bottom: 15px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
       justify-content: space-between;
       width: 80%;
-      max-width: 400px;
+      max-width: 500px;
       background: #ffcc00;
-      padding: 10px;
+      padding: 15px;
       border-radius: 12px;
       box-shadow: 0 0 10px rgba(0,0,0,0.3);
     }
     button {
       font-family: 'Joystix', sans-serif;
-      font-size: 18px;
-      padding: 10px 15px;
+      font-size: 20px;
+      padding: 15px 25px;
       border: none;
-      border-radius: 6px;
+      border-radius: 10px;
       background-color: #da291c;
       color: white;
       cursor: pointer;
@@ -93,14 +94,17 @@
     }
     #health {
       position: absolute;
-      top: 10px;
-      left: 10px;
-      font-size: 20px;
+      top: 15px;
+      left: 15px;
+      font-size: 15px;
       font-weight: bold;
       color: #333;
     }
     #restartButton {
       display: none;
+      font-size: 28px;
+      padding: 15px 25px;
+      background-color: #4caf50;
     }
   </style>
 </head>
@@ -125,7 +129,7 @@
     const moveLeftButton = document.getElementById('moveLeft');
     const shootButton = document.getElementById('shootButton');
     const moveRightButton = document.getElementById('moveRight');
-    let aimX = window.innerWidth / 2 - 10;
+    let aimX = window.innerWidth / 2 - 20;
     let health = 100;
     const damageMap = Array(9).fill(0);
 
@@ -134,12 +138,12 @@
     }
 
     function moveLeft() {
-      aimX = Math.max(0, aimX - 20);
+      aimX = Math.max(0, aimX - 40);
       updateAim();
     }
 
     function moveRight() {
-      aimX = Math.min(window.innerWidth - 20, aimX + 20);
+      aimX = Math.min(window.innerWidth - 40, aimX + 40);
       updateAim();
     }
 
@@ -148,7 +152,7 @@
       for (let i = 0; i < 9; i++) {
         const div = document.createElement('div');
         div.classList.add('block');
-        div.style.backgroundPosition = `-${(i % 3) * 50}px -${Math.floor(i / 3) * 50}px`;
+        div.style.backgroundPosition = `-${(i % 3) * 66}px -${Math.floor(i / 3) * 66}px`;
         div.dataset.index = i;
         building.appendChild(div);
       }
@@ -157,23 +161,23 @@
     function shoot() {
       const projectile = document.createElement('div');
       projectile.classList.add('projectile');
-      projectile.style.left = (aimX + 5) + 'px';
+      projectile.style.left = (aimX + 10) + 'px';
       projectile.style.top = '20px';
       document.body.appendChild(projectile);
 
       let pos = 20;
       const interval = setInterval(() => {
-        pos += 10;
+        pos += 20;
         projectile.style.top = pos + 'px';
 
-        const projectileCenter = aimX + 10;
+        const projectileCenter = aimX + 20;
         const blocks = Array.from(building.children);
 
         blocks.forEach(block => {
           const rect = block.getBoundingClientRect();
           if (
             !block.classList.contains('invisible') &&
-            pos + 20 >= rect.top &&
+            pos + 40 >= rect.top &&
             pos <= rect.bottom &&
             projectileCenter >= rect.left &&
             projectileCenter <= rect.right
@@ -202,7 +206,7 @@
         moveLeftButton.style.display = 'none';
         shootButton.style.display = 'none';
         moveRightButton.style.display = 'none';
-        aimX = window.innerWidth / 2 - 10;
+        aimX = window.innerWidth / 2 - 20;
         updateAim();
       }
     }
@@ -216,14 +220,14 @@
       moveLeftButton.style.display = 'inline-block';
       shootButton.style.display = 'inline-block';
       moveRightButton.style.display = 'inline-block';
-      aimX = window.innerWidth / 2 - 10;
+      aimX = window.innerWidth / 2 - 20;
       updateAim();
     }
 
     updateAim();
     createBuilding();
     window.addEventListener('resize', () => {
-      aimX = window.innerWidth / 2 - 10;
+      aimX = window.innerWidth / 2 - 20;
       updateAim();
     });
   </script>
