@@ -67,6 +67,10 @@
       bottom: 10px;
       left: 50%;
       transform: translateX(-50%);
+      display: flex;
+      justify-content: space-between;
+      width: 80%;
+      max-width: 400px;
       background: #ffcc00;
       padding: 10px;
       border-radius: 12px;
@@ -75,13 +79,14 @@
     button {
       font-family: 'Joystix', sans-serif;
       font-size: 18px;
-      margin: 5px;
       padding: 10px 15px;
       border: none;
       border-radius: 6px;
       background-color: #da291c;
       color: white;
       cursor: pointer;
+      flex: 1;
+      margin: 5px;
     }
     button:hover {
       background-color: #b81d14;
@@ -108,8 +113,8 @@
       <button id="moveLeft" onclick="moveLeft()">&larr;</button>
       <button id="shootButton" onclick="shoot()">Вогонь</button>
       <button id="moveRight" onclick="moveRight()">&rarr;</button>
-      <button id="restartButton" onclick="restartGame()">Заново</button>
     </div>
+    <button id="restartButton" onclick="restartGame()">Заново</button>
   </div>
 
   <script>
