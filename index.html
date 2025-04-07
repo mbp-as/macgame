@@ -3,20 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <title>Гра: Стріляй по М</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <style>
     @font-face {
       font-family: 'Joystix';
       src: url('font.otf') format('opentype');
     }
 
-    body {
+    html, body {
+      touch-action: manipulation;
+      overscroll-behavior: none;
       font-family: 'Joystix', sans-serif;
       background: #eef;
       margin: 0;
       padding: 0;
       overflow: hidden;
     }
+
+    * {
+      touch-action: manipulation;
+    }
+
     #game {
       position: relative;
       width: 100%;
@@ -119,10 +126,13 @@
       <button id="moveRight" onclick="moveRight()">&rarr;</button>
       <button id="restartButton" onclick="restartGame()">Заново</button>
     </div>
-    
   </div>
 
   <script>
+    document.addEventListener('gesturestart', e => e.preventDefault());
+    document.addEventListener('gesturechange', e => e.preventDefault());
+    document.addEventListener('gestureend', e => e.preventDefault());
+
     const aim = document.getElementById('aim');
     const building = document.getElementById('building');
     const healthDisplay = document.getElementById('health');
@@ -184,10 +194,12 @@
             projectileCenter <= rect.right
           ) {
             const i = parseInt(block.dataset.index);
-            damageMap[i]++;
-            if (damageMap[i] >= 2) block.classList.add('invisible');
-            health = Math.max(0, health - 5);
-            healthDisplay.textContent = 'Здоров’я: ' + health;
+            if (damageMap[i] < 2) {
+              damageMap[i]++;
+              if (damageMap[i] >= 2) block.classList.add('invisible');
+              health = Math.max(0, health - 5);
+              healthDisplay.textContent = 'Здоров’я: ' + health;
+            }
             checkGameEnd();
             clearInterval(interval);
             projectile.remove();
