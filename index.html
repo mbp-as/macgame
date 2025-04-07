@@ -128,6 +128,11 @@
     </div>
   </div>
 
+  <!-- Звуки -->
+<audio id="shotSound" src="shot.wav"></audio>
+<audio id="winSound" src="win.mp3"></audio>
+
+
   <script>
     document.addEventListener('gesturestart', e => e.preventDefault());
     document.addEventListener('gesturechange', e => e.preventDefault());
@@ -143,6 +148,9 @@
     let aimX = window.innerWidth / 2 - 20;
     let health = 100;
     const damageMap = Array(9).fill(0);
+    const shotSound = document.getElementById('shotSound');
+    const winSound = document.getElementById('winSound');
+
 
     function updateAim() {
       aim.style.left = aimX + 'px';
@@ -175,6 +183,8 @@
       projectile.style.left = (aimX + 10) + 'px';
       projectile.style.top = '20px';
       document.body.appendChild(projectile);
+      shotSound.currentTime = 0;
+      shotSound.play();
 
       let pos = 20;
       const interval = setInterval(() => {
@@ -215,6 +225,7 @@
 
     function checkGameEnd() {
       if (damageMap.every(h => h >= 2)) {
+        winSound.play();
         restartButton.style.display = 'inline-block';
         moveLeftButton.style.display = 'none';
         shootButton.style.display = 'none';
